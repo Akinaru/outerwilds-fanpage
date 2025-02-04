@@ -1,7 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 
+// Types definitions
+interface DialogueResponse {
+  text: string;
+  nextId: string;
+}
+
+interface DialogueNode {
+  text: string;
+  responses: DialogueResponse[];
+}
+
+interface DialogueNodes {
+  [key: string]: DialogueNode;
+}
+
 // Structure des dialogues
-const dialogueNodes = {
+const dialogueNodes: DialogueNodes = {
   "start": {
     text: "Salutations, voyageur des étoiles ! *ajuste son casque* Tu tombes bien, je faisais des observations fascinantes sur l'œil quantique. Salutations, voyageur des étoiles ! *ajuste son casque* Tu tombes bien, je faisais des observations fascinantes sur l'œil quantique.",
     responses: [
@@ -59,35 +74,37 @@ const dialogueNodes = {
   }
 };
 
-function App() {
-  const [currentNodeId, setCurrentNodeId] = useState("start");
-  const [displayedText, setDisplayedText] = useState("");
-  const [isTyping, setIsTyping] = useState(true);
-  const [showResponses, setShowResponses] = useState(false);
-  const [isEnded, setIsEnded] = useState(false);
-  const typingIntervalRef = useRef(null);
-
-  const currentNode = dialogueNodes[currentNodeId];
-  const typingSpeed = 30; // ms par caractère
+const App: React.FC = () => {
+  const [currentNodeId, setCurrentNodeId] = useState<string>("start");
+  const [displayedText, setDisplayedText] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(true);
+  const [showResponses, setShowResponses] = useState<boolean>(false);
+  const [isEnded, setIsEnded] = useState<boolean>(false);
+  
+  const typingIntervalRef = useRef<number | null>(null);
+  const currentNode: DialogueNode = dialogueNodes[currentNodeId];
+  const typingSpeed: number = 30; // ms par caractère
 
   useEffect(() => {
-    let isMounted = true;
+    let isMounted: boolean = true;
     setIsTyping(true);
     setShowResponses(false);
     setIsEnded(false);
     setDisplayedText("");
     
-    const text = currentNode.text;
-    let currentIndex = 0;
+    const text: string = currentNode.text;
+    let currentIndex: number = 0;
     
-    typingIntervalRef.current = setInterval(() => {
+    typingIntervalRef.current = window.setInterval(() => {
       if (!isMounted || !isTyping) return;
 
       if (currentIndex < text.length) {
         setDisplayedText(text.substring(0, currentIndex + 1));
         currentIndex++;
       } else {
-        clearInterval(typingIntervalRef.current);
+        if (typingIntervalRef.current !== null) {
+          clearInterval(typingIntervalRef.current);
+        }
         setIsTyping(false);
         setShowResponses(true);
       }
@@ -95,21 +112,21 @@ function App() {
 
     return () => {
       isMounted = false;
-      if (typingIntervalRef.current) {
+      if (typingIntervalRef.current !== null) {
         clearInterval(typingIntervalRef.current);
       }
     };
   }, [currentNodeId]);
 
-  const handleResponseClick = (nextId) => {
+  const handleResponseClick = (nextId: string): void => {
     setShowResponses(false);
     setIsTyping(true);
     setCurrentNodeId(nextId);
   };
 
-  const skipAnimation = () => {
+  const skipAnimation = (): void => {
     if (isTyping) {
-      if (typingIntervalRef.current) {
+      if (typingIntervalRef.current !== null) {
         clearInterval(typingIntervalRef.current);
       }
       setDisplayedText(currentNode.text);
@@ -119,8 +136,6 @@ function App() {
   };
 
   return (
-
-    
     <div className="font-brandon bg-red max-w-2xl mx-auto p-4 bg-gray-900 min-h-screen text-white">
       <div style={{ fontFamily: 'Brandon Grotesque' }}>
         Test de la police
@@ -138,7 +153,7 @@ function App() {
       {/* Response Options */}
       {showResponses && (
         <div className="space-y-2">
-          {currentNode.responses.map((response, index) => (
+          {currentNode.responses.map((response: DialogueResponse, index: number) => (
             <button
               key={index}
               onClick={() => handleResponseClick(response.nextId)}
@@ -179,6 +194,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
