@@ -1,88 +1,34 @@
-import { useEffect, useRef, useState } from 'react';
-import DialogBox from './components/DialogBox';
-import { Play, Pause, Volume2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { useParams, Outlet, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import './lang/i18n';
+import LanguageSwitcher from './components/LanguageSwitcher';
 
-// Import direct des fichiers audio
-import campfire from './assets/sounds/OW_TH_Campfire_loop_01.wav';
-import insects1 from './assets/sounds/OW_TH_Insects_loop_01.wav';
-import insects2 from './assets/sounds/OW_TH_Insects_loop_02.wav';
-import insects3 from './assets/sounds/OW_TH_Insects_loop_03.wav';
+function App() {
+  const { i18n } = useTranslation();
+  const { lang } = useParams();
+  const location = useLocation();
 
-const App = () => {
-  const audioRefs = useRef<HTMLAudioElement[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  
-  const soundFiles = [
-    campfire,
-    insects1,
-    insects2,
-    insects3
-  ];
 
   useEffect(() => {
-    // Initialisation des sons
-    soundFiles.forEach((soundFile, index) => {
-      const audio = new Audio(soundFile);
-      audio.loop = true;
-      audio.volume = 0.05;
-      audioRefs.current[index] = audio;
-    });
-
-    // Nettoyage
-    return () => {
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      });
-    };
-  }, []);
-
-  const togglePlay = () => {
-    if (!isPlaying) {
-      // Démarrage de tous les sons
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.play().catch(error => {
-            console.error('Erreur lors de la lecture:', error);
-          });
-        }
-      });
-    } else {
-      // Arrêt de tous les sons
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      });
+    if (lang && (lang === "en" || lang === "fr")) {
+      i18n.changeLanguage(lang);
     }
-    setIsPlaying(!isPlaying);
-  };
+  }, [lang, i18n]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [location.pathname]);
 
   return (
-    <div className="App">
-      <div className="fixed top-4 right-4 flex items-center gap-2 bg-white/90 p-2 rounded-lg shadow-md">
-        <button
-          onClick={togglePlay}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          {isPlaying ? (
-            <>
-              <Pause size={20} /> Pause
-            </>
-          ) : (
-            <>
-              <Play size={20} /> Jouer
-            </>
-          )}
-        </button>
-        <Volume2 size={20} className="text-blue-500" />
-      </div>
-      <DialogBox />
+    <div className="overflow-x-hidden relative">
+      <LanguageSwitcher />
+      <Outlet />
     </div>
   );
-};
+}
 
 export default App;

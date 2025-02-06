@@ -1,0 +1,14 @@
+
+
+{
+
+    "nav": {
+      "home": "Accueil",
+      "about": "À propos",
+      "projects": "Projets",
+      "experience": "Parcours",
+      "competence": "Compétences",
+      "contact": "Contact"
+    }
+  
+  }
