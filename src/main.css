@@ -17,7 +17,7 @@
 
   .font-brandon {
     font-family: 'Brandon Grotesque';
-}
+  }
 
 .font-brandon-bold {
     font-family: 'Brandon Grotesque';
@@ -28,4 +28,12 @@
     font-family: 'Brandon Grotesque';
     font-weight: bold;
     font-style: italic;
+}
+
+.text-title{
+   font-size: 32px;
+}
+
+.text-normal{
+  font-size: 26px;
 }
