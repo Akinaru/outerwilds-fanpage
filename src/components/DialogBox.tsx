@@ -143,6 +143,8 @@ const DialogBox: React.FC = () => {
     const hoverSoundRef = useRef<HTMLAudioElement | null>(null);
     const advanceSoundRef = useRef<HTMLAudioElement | null>(null);
     const currentNode: DialogueNode = dialogueNodes[currentNodeId];
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [isKeyboardNav, setIsKeyboardNav] = useState<boolean>(false);
     const typingSpeed: number = 20;
   
     useEffect(() => {
@@ -202,57 +204,44 @@ const DialogBox: React.FC = () => {
     }, [currentNodeId]);
 
     useEffect(() => {
-      const handleKeyPress = (event: KeyboardEvent) => {
-        if (event.key.toLowerCase() === 'e') {
-          event.preventDefault();
-          if (isTyping) {
-            skipAnimation();
-            return;
-          }
-          if (!showResponses || !currentNode) return;
-          const responses = currentNode.responses || [];
-          const responseCount = responses.length;
-          if (responseCount === 0) {
-            handleEndOrAutoNext();
-          } else if (responses[selectedIndex]) {
-            handleResponseClick(responses[selectedIndex].nextId);
-          }
-          playAdvanceDialogSound();
-          return;
-        }
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key.toLowerCase() === 'e') {
+                event.preventDefault();
+                if (isTyping) {
+                    skipAnimation();
+                    return;
+                }
+                if (!showResponses || !currentNode) return;
+                const responses = currentNode.responses || [];
+                const responseCount = responses.length;
+                if (responseCount === 0) {
+                    handleEndOrAutoNext();
+                } else if (responses[activeIndex]) {
+                    handleResponseClick(responses[activeIndex].nextId);
+                }
+                playAdvanceDialogSound();
+                return;
+            }
 
-        if (!showResponses || !currentNode) return;
-        const responses = currentNode.responses || [];
-        const responseCount = responses.length;
+            if (!showResponses || !currentNode) return;
+            const responses = currentNode.responses || [];
+            const responseCount = responses.length;
 
-        if (event.key === 'ArrowUp') {
-          event.preventDefault();
-          setSelectedIndex(prev => {
-            const newIndex = prev > 0 ? prev - 1 : Math.max(responseCount - 1, 0);
-            playHoverSound();
-            return newIndex;
-          });
-        } else if (event.key === 'ArrowDown') {
-          event.preventDefault();
-          setSelectedIndex(prev => {
-            const newIndex = prev < responseCount - 1 ? prev + 1 : 0;
-            playHoverSound();
-            return newIndex;
-          });
-        } else if (event.key.toLowerCase() === 'e') {
-          event.preventDefault();
-          if (responseCount === 0) {
-            handleEndOrAutoNext();
-          } else if (responses[selectedIndex]) {
-            handleResponseClick(responses[selectedIndex].nextId);
-          }
-          playAdvanceDialogSound();
-        }
-      };
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                setIsKeyboardNav(true);
+                if (event.key === 'ArrowUp') {
+                    setActiveIndex(prev => prev > 0 ? prev - 1 : Math.max(responseCount - 1, 0));
+                } else {
+                    setActiveIndex(prev => prev < responseCount - 1 ? prev + 1 : 0);
+                }
+                playHoverSound();
+            }
+        };
 
-      window.addEventListener('keydown', handleKeyPress);
-      return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [showResponses, selectedIndex, currentNode]);
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [showResponses, activeIndex, currentNode]);
   
     const handleResponseClick = (nextId: string): void => {
       setIsTyping(true);
@@ -319,50 +308,56 @@ const DialogBox: React.FC = () => {
               </div>
 
               {showResponses && (
-                <div className="">
-                    <div className='mt-4'>
-                        {currentNode.responses.map((response: DialogueResponse, index: number) => (
-                            <div 
-                            className="flex justify-center items-center"
-                            key={index}
-                            onMouseEnter={() => {
-                                setHoveredIndex(index);
-                                setSelectedIndex(index);
-                                playHoverSound();
-                            }}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                            >
-                            <div className="w-24">
-                                <div className={`flex justify-center items-center gap-2 transition-opacity duration-100 ${(hoveredIndex === index || selectedIndex === index) ? 'opacity-100' : 'opacity-0'}`}>
-                                <img src={EImg} alt="E Shortcut" className="h-8" />
-                                <img src={ArrowImg} alt="Arrow" className="h-6" />
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => {handleResponseClick(response.nextId); playAdvanceDialogSound();}}
-                                className="cursor-pointer w-full text-left rounded-lg transition-colors text-normal"
-                            >
-                                {response.text}
-                            </button>
-                            </div>
-                        ))}
-                    </div>
+  <div className="">
+    <div className='mt-4'>
+      {currentNode.responses.map((response: DialogueResponse, index: number) => (
+        <div 
+          className="flex justify-center items-center"
+          key={index}
+          onMouseEnter={() => {
+            if (!isKeyboardNav) {
+              setActiveIndex(index);
+              playHoverSound();
+            }
+          }}
+          onMouseMove={() => {
+            setIsKeyboardNav(false);
+          }}
+          onMouseLeave={() => {
+            // Ne rien faire au mouseLeave
+          }}
+        >
+          <div className="w-24">
+            <div className={`flex justify-center items-center gap-2 transition-opacity duration-100 ${activeIndex === index ? 'opacity-100' : 'opacity-0'}`}>
+              <img src={EImg} alt="E Shortcut" className="h-8" />
+              <img src={ArrowImg} alt="Arrow" className="h-6" />
+            </div>
+          </div>
+          <button
+            onClick={() => {handleResponseClick(response.nextId); playAdvanceDialogSound();}}
+            className="cursor-pointer w-full text-left rounded-lg transition-colors text-normal"
+          >
+            {response.text}
+          </button>
+        </div>
+      ))}
+    </div>
 
-                  {currentNode.responses.length === 0 && (
-                    <button
-                      onClick={() => {handleEndOrAutoNext(); playAdvanceDialogSound();}}
-                      className="w-full flex justify-end rounded-lg transition-colors cursor-pointer mb-24"
-                    >
-                      <img src={EImg} alt="E Shortcut" className="h-8 mt-6"
-                       onLoad={(e) => {
-                        setTimeout(() => {
-                          (e.target as HTMLImageElement).style.opacity = '1';
-                        }, 5);
-                      }} />
-                    </button>
-                  )}
-                </div>
-              )}
+    {currentNode.responses.length === 0 && (
+      <button
+        onClick={() => {handleEndOrAutoNext(); playAdvanceDialogSound();}}
+        className="w-full flex justify-end rounded-lg transition-colors cursor-pointer mb-24"
+      >
+        <img src={EImg} alt="E Shortcut" className="h-8 mt-6"
+          onLoad={(e) => {
+            setTimeout(() => {
+              (e.target as HTMLImageElement).style.opacity = '1';
+            }, 5);
+          }} />
+      </button>
+    )}
+  </div>
+)}
             </div>
           </div>
         </div>
