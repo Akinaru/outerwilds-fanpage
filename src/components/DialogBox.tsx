@@ -135,8 +135,7 @@ const DialogBox: React.FC = () => {
     const [isTyping, setIsTyping] = useState<boolean>(true);
     const [showResponses, setShowResponses] = useState<boolean>(false);
     const [isEnded, setIsEnded] = useState<boolean>(false);
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [, setSelectedIndex] = useState<number>(0);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     
     const typingIntervalRef = useRef<number | null>(null);

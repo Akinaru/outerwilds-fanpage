@@ -1,81 +1,83 @@
-import { useEffect, useRef, useState } from 'react';
-import DialogBox from '../components/DialogBox';
-import { Play, Pause, Volume2 } from 'lucide-react';
-
-import campfire from '../assets/sounds/OW_TH_Campfire_loop_01.wav';
-import insects1 from '../assets/sounds/OW_TH_Insects_loop_01.wav';
-import insects2 from '../assets/sounds/OW_TH_Insects_loop_02.wav';
-import insects3 from '../assets/sounds/OW_TH_Insects_loop_03.wav';
+import React, { useState, useEffect } from 'react';
+import Logo from '../assets/img/outer_wilds_logo.png';
+import Separator from '../assets/img/separator_main_menu.svg';
+import ArrowImg from '../assets/img/HUD_UI_WhiteArrow_d_Hover.png';
 
 const Home = () => {
-  const audioRefs = useRef<HTMLAudioElement[]>([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  
-  const soundFiles = [
-    campfire,
-    insects1,
-    insects2,
-    insects3
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isKeyboardNav, setIsKeyboardNav] = useState(false);
+
+  const menuItems = [
+    'Reprendre l\'expédition',
+    'Nouvelle expédition',
+    'options',
+    'crédits',
+    'quitter'
   ];
 
   useEffect(() => {
-    soundFiles.forEach((soundFile, index) => {
-      const audio = new Audio(soundFile);
-      audio.loop = true;
-      audio.volume = 0.05;
-      audioRefs.current[index] = audio;
-    });
-
-    return () => {
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
+    const handleKeyPress = (event) => {
+      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        setIsKeyboardNav(true);
+        
+        if (event.key === 'ArrowUp') {
+          setActiveIndex(prev => prev > 0 ? prev - 1 : menuItems.length - 1);
+        } else {
+          setActiveIndex(prev => prev < menuItems.length - 1 ? prev + 1 : 0);
         }
-      });
+      }
     };
-  }, []);
 
-  const togglePlay = () => {
-    if (!isPlaying) {
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.play().catch(error => {
-            console.error('Erreur lors de la lecture:', error);
-          });
-        }
-      });
-    } else {
-      audioRefs.current.forEach(audio => {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      });
-    }
-    setIsPlaying(!isPlaying);
-  };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [menuItems.length]);
 
   return (
-    <div className="App">
-      <div className="fixed top-4 right-4 flex items-center gap-2 bg-white/90 p-2 rounded-lg shadow-md">
-        <button
-          onClick={togglePlay}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          {isPlaying ? (
-            <>
-              <Pause size={20} /> Pause
-            </>
-          ) : (
-            <>
-              <Play size={20} /> Jouer
-            </>
-          )}
-        </button>
-        <Volume2 size={20} className="text-blue-500" />
+    <div className="bg-black min-h-screen text-white flex items-center">
+      <div className="pl-26">
+        <div className='inline-block'>
+          <div className='flex items-start justify-start'>
+            <img src={Logo} alt="Outer Wilds" className='pb-16 object-contain w-[32rem]' />
+          </div>
+          <div>
+            <img src={Separator} alt="Outer Wilds" className='object-contain w-[32rem]' />
+          </div>
+          <div className='flex items-start justify-center'>
+            <div className='tracking-widest uppercase font-serif-gothic flex items-start justify-start flex-col text-4xl py-24 gap-2'>
+              {menuItems.map((item, index) => (
+                <div 
+                  key={index}
+                  className="w-full relative"
+                  onMouseEnter={() => {
+                    if (!isKeyboardNav) {
+                      setActiveIndex(index);
+                    }
+                  }}
+                  onMouseMove={() => setIsKeyboardNav(false)}
+                >
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-15">
+                    <div className={`transition-opacity duration-100 ${activeIndex === index ? 'opacity-100' : 'opacity-0'}`}>
+                      <img src={ArrowImg} alt="Arrow" className="h-5" />
+                    </div>
+                  </div>
+                  <p className={`cursor-pointer text-center w-full transition-colors duration-100 ${activeIndex === index ? 'text-[#FCDCC4]' : 'text-orange'}`}>
+                    {item}
+                  </p>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-15">
+                    <div className={`transition-opacity duration-100 ${activeIndex === index ? 'opacity-100' : 'opacity-0'}`}>
+                      <img src={ArrowImg} alt="Arrow" className="h-5 transform rotate-180" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <img src={Separator} alt="Outer Wilds" className='object-contain w-[32rem]' />
+          </div>
+        </div>
       </div>
-      <DialogBox />
     </div>
   );
 };

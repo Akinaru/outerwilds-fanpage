@@ -4,6 +4,8 @@ import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import App from "./App";
 import Home from "./pages/Home";
 import './main.css'
+import "./styles/espacements.css"
+import Test from "./pages/Test";
 
 const detectBrowserLanguage = () => {
   return navigator.language.startsWith("fr") ? "fr" : "en";
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "test",
+        element: <Test />,
       }
     ]
   },
