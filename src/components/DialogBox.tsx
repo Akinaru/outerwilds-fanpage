@@ -73,6 +73,7 @@ const DialogBox: React.FC<DialogBoxProps> = ({
     setShowResponses(false);
     setIsEnded(false);
     setDisplayedText("");
+    setActiveIndex(0);
     
     const text: string = currentNode.text;
     let currentIndex: number = 0;
@@ -99,6 +100,12 @@ const DialogBox: React.FC<DialogBoxProps> = ({
       }
     };
   }, [currentNodeId, currentNode.text]);
+
+  useEffect(() => {
+    if (showResponses) {
+      setActiveIndex(0);
+    }
+  }, [showResponses]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {

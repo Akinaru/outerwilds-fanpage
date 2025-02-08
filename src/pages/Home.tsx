@@ -4,22 +4,28 @@ import Separator from '../assets/img/separator_main_menu.svg';
 import ArrowImg from '../assets/img/HUD_UI_WhiteArrow_d_Hover.png';
 import DialogBox from '../components/DialogBox';
 import { creditsDialogue } from '../dialogues/credits';
+import { eoteDialogue } from '../dialogues/echoOfTheYes';
+import { optionsDialogue } from '../dialogues/options';
 
 const Home = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isKeyboardNav, setIsKeyboardNav] = useState(false);
+
+  //Dialogs
   const [showCredits, setShowCredits] = useState(false);
+  const [showEOTE, setShowEOTE] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
   const menuItems = [
     'Reprendre l\'expédition',
-    'Nouvelle expédition',
+    'Echoes of the Eye',
     'options',
     'crédits',
   ];
 
   useEffect(() => {
     const handleKeyPress = (event: { key: string; preventDefault: () => void; }) => {
-      if (!showCredits && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+      if (!showCredits && !showEOTE && !showOptions && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
         event.preventDefault();
         setIsKeyboardNav(true);
         
@@ -28,20 +34,26 @@ const Home = () => {
         } else {
           setActiveIndex(prev => prev < menuItems.length - 1 ? prev + 1 : 0);
         }
-      } else if (!showCredits && event.key === 'Enter') {
+      } else if (!showCredits && !showEOTE && !showOptions && event.key === 'Enter') {
         handleMenuItemClick(activeIndex);
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [menuItems.length, activeIndex, showCredits]);
+  }, [menuItems.length, activeIndex, showCredits, showEOTE]);
 
   const handleMenuItemClick = (index: number) => {
+    console.log(menuItems[index]);
     if (menuItems[index].toLowerCase() === 'crédits') {
       setShowCredits(true);
     }
-    // Ajouter d'autres actions pour les autres items du menu ici
+    if (menuItems[index] === 'Echoes of the Eye') {
+      setShowEOTE(true);
+    }
+    if (menuItems[index] === 'options') {
+      setShowOptions(true);
+    }
   };
 
   return (
@@ -96,6 +108,20 @@ const Home = () => {
             dialogueNodes={creditsDialogue}
             initialNodeId="start"
             onDialogueEnd={() => setShowCredits(false)}
+          />
+      )}
+      {showEOTE && (
+          <DialogBox 
+            dialogueNodes={eoteDialogue}
+            initialNodeId="start"
+            onDialogueEnd={() => setShowEOTE(false)}
+          />
+      )}
+      {showOptions && (
+          <DialogBox 
+            dialogueNodes={optionsDialogue}
+            initialNodeId="start"
+            onDialogueEnd={() => setShowOptions(false)}
           />
       )}
     </div>
