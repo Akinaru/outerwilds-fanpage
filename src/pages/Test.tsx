@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import DialogBox from '../components/DialogBox';
 import { Play, Pause, Volume2 } from 'lucide-react';
 
 import campfire from '../assets/sounds/OW_TH_Campfire_loop_01.wav';

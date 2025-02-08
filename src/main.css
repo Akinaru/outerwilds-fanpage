@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-@font-face {
+  @font-face {
     font-family: 'Brandon Grotesque';
     src: url('./assets/fonts/BrandonGrotesque-Bold.otf') format('opentype');
     font-weight: bold;
@@ -16,7 +16,7 @@
   }
 
   @font-face {
-    font-family: 'Serif Gothic';
+    font-family: 'ITC Serif Gothic';
     src: url('assets/fonts/itc-serif-gothic-std-heavy.otf') format('opentype');
   }
 
@@ -25,7 +25,7 @@
   }
 
   .font-serif-gothic {
-    font-family: 'Serif Gothic';
+    font-family: 'ITC Serif Gothic';
   }
 
 .font-brandon-bold {

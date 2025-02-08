@@ -44,7 +44,6 @@ const Home = () => {
   }, [menuItems.length, activeIndex, showCredits, showEOTE]);
 
   const handleMenuItemClick = (index: number) => {
-    console.log(menuItems[index]);
     if (menuItems[index].toLowerCase() === 'crédits') {
       setShowCredits(true);
     }
