@@ -22,27 +22,29 @@ const Home = () => {
     {
       label: 'home.menu.play',
       action: () => {
-        console.log('Play clicked');
       },
     },
     {
       label: 'home.menu.dlc',
       action: () => {
-        console.log('DLC clicked');
         setShowEOTE(true);
       },
     },
     {
       label: 'home.menu.options',
       action: () => {
-        console.log('Options clicked');
         setShowOptions(true);
+      },
+    },
+    {
+      label: 'home.menu.help',
+      action: () => {
+        setShowCredits(true);
       },
     },
     {
       label: 'home.menu.credits',
       action: () => {
-        console.log('Credits clicked');
         setShowCredits(true);
       },
     },
@@ -60,7 +62,6 @@ const Home = () => {
           setActiveIndex(prev => (prev < menuItems.length - 1 ? prev + 1 : 0));
         }
       } else if (!showCredits && !showEOTE && !showOptions && event.key === 'Enter') {
-        console.log('Enter pressed on index', activeIndex);
         menuItems[activeIndex].action();
       }
     };
@@ -93,7 +94,6 @@ const Home = () => {
                         onMouseMove={() => setIsKeyboardNav(false)}
                         onClick={() => {
                           if (!showCredits) {
-                            console.log('Mouse click on index', index);
                             item.action();
                           }
                         }}
