@@ -1,0 +1,79 @@
+{
+  "credits": {
+    "start": {
+      "text": "*ajuste ses instruments* Ah, tu t'intéresses à l'équipe derrière cette aventure spatiale ?",
+      "q_creator": "Qui est derrière ce projet ?",
+      "q_mobius": "Parle-moi des créateurs originaux",
+      "q_end": "Je n'ai plus de questions."
+    },
+    "about_creator": {
+      "text": "Un passionné d'exploration et de mystères... *ajuste son télescope* Quelqu'un qui, comme toi, est fasciné par les secrets de l'univers et souhaite partager cette fascination avec d'autres voyageurs des étoiles.",
+      "q_insist": "Non, je veux vraiment savoir qui tu es !",
+      "q_back": "J'ai d'autres questions."
+    },
+    "about_creator_insist": {
+      "text": "*fait un clin d'œil complice* Eh bien, puisque tu insistes... On m'appelle Aki. Si tu veux me contacter, tu peux m'envoyer un signal à maxime@gallotta.fr."
+    },
+    "about_mobius": {
+      "text": "*sort un vieux livre poussiéreux* Ah, Mobius Digital... *tourne délicatement les pages* Un studio extraordinaire fondé par Alex Beachum et Loan Verneau. Ce sont eux qui ont créé l'œuvre originale d'Outer Wilds."
+    },
+    "about_mobius_2": {
+      "text": "*pointe une constellation* Leur vision a donné naissance à un univers unique où la curiosité et la découverte sont au cœur de l'aventure. Tout a commencé comme un projet étudiant d'Alex à l'USC, avant de devenir ce chef-d'œuvre que nous connaissons."
+    },
+    "goodbye": {
+      "text": "Que les étoiles illuminent ton chemin, voyageur. *range son carnet de notes* J'espère te revoir bientôt dans l'immensité de l'espace !"
+    }
+  },
+  "eote": {
+    "start": {
+      "text": "*ajuste nerveusement ses notes* ATTENTION : Ce qui suit contient des révélations majeures sur l'extension Echoes of the Eye. Si tu souhaites découvrir ses mystères par toi-même, je te conseille de partir maintenant.",
+      "q_continue": "Je souhaite continuer malgré tout",
+      "q_leave": "Tu as raison, je préfère découvrir par moi-même"
+    },
+    "leave": {
+      "text": "*sourire bienveillant* Une sage décision. Certaines découvertes méritent d'être faites par soi-même. Bon voyage parmi les étoiles !"
+    },
+    "begin_story": {
+      "text": "As-tu remarqué quelque chose d'étrange dans les photos du satellite ? Cette anomalie qui apparaît... et disparaît.",
+      "q_ring": "L'étrange anneau lumineux ?",
+      "q_nothing": "Je n'ai rien remarqué de particulier."
+    },
+    "explain": {
+      "text": "Regarde plus attentivement. Il y a quelque chose qui bloque périodiquement la lumière des étoiles. Comme si... quelque chose d'énorme se déplaçait devant elles.",
+      "q_see_now": "Maintenant que tu le dis..."
+    },
+    "ring": {
+      "text": "Exact. Une structure artificielle, cachée à la vue de tous depuis si longtemps. Mais pourquoi ? Et qui l'a construite ?",
+      "q_nomai": "Les Nomaï ?",
+      "q_other_species": "Une autre espèce ?"
+    },
+    "not_nomai": {
+      "text": "Non... Le style architectural est complètement différent. Et les symboles qu'on y trouve... je n'ai jamais rien vu de tel dans les ruines Nomaï.",
+      "q_suggest": "Que suggères-tu ?"
+    },
+    "mysterious_species": {
+      "text": "Il y a tant de questions sans réponses. Cette structure semble avoir été délibérément dissimulée. Comme si... quelqu'un ne voulait pas qu'on la trouve.",
+      "q_explore": "Comment pouvons-nous l'explorer ?",
+      "q_hide_it": "Peut-être devrait-elle rester cachée..."
+    },
+    "warning": {
+      "text": "La curiosité est dans notre nature. C'est ce qui nous a menés jusqu'aux étoiles. Mais parfois... parfois, certaines découvertes viennent avec leur lot de dangers.",
+      "q_accept_risk": "Je comprends les risques."
+    },
+    "explore": {
+      "text": "Il y a un endroit... un point d'observation particulier depuis lequel on pourrait peut-être... Mais sois prudent. La nuit peut être plus sombre qu'elle n'y paraît.",
+      "q_go": "Je trouverai un moyen d'y accéder."
+    },
+    "end": {
+      "text": "Bonne chance, voyageur. Et n'oublie pas... parfois, la lumière peut être notre meilleure alliée dans l'obscurité."
+    }
+  },
+  "options": {
+    "start": {
+      "text": "Il n'y a rien pour le moment dans cette section :D"
+    },
+    "encouragement": {
+      "text": "Mais ne t'inquiète pas, le contenu arrive bientôt ! *range ses notes avec enthousiasme*"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+$main-color: #EC7932;
+
+.text-title{
+  font-size: 32px;
+}
+
+.text-normal{
+  font-size: 26px;
+}
+
+.text-orange{
+  color: #EC7932;
+}
+
+.custom-border{
+  border: 3px solid $main-color;
+}
+
+button{
+  cursor: pointer;
+  &:disabled{
+    cursor: auto;
+  }
+}

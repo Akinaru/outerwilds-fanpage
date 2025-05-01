@@ -1,12 +1,74 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import translationFR from "./fr/translation.json";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+// ✅ Config langues + namespaces
+const langCodes = ['fr', 'en'] as const;
+const namespaces = ['translation', 'core', 'dialogue'] as const;
+
+export interface Language {
+  code: string;
+  name: string;
+  flag: JSX.Element;
+  disabled?: boolean;
+}
+
+export const languages: Language[] = [
+  {
+    code: 'fr',
+    name: 'Français',
+    flag: (
+        <svg className="w-5 h-5" viewBox="0 0 640 480">
+          <g fillRule="evenodd" strokeWidth="1pt">
+            <path fill="#fff" d="M0 0h640v480H0z" />
+            <path fill="#00267f" d="M0 0h213.3v480H0z" />
+            <path fill="#f31830" d="M426.7 0H640v480H426.7z" />
+          </g>
+        </svg>
+    ),
+  },
+  {
+    code: 'en',
+    name: 'English',
+    flag: (
+        <svg className="w-5 h-5" viewBox="0 0 60 30">
+          <rect width="60" height="30" fill="#00247d" />
+          <path fill="#fff" d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" strokeWidth="6" />
+          <path fill="#cf142b" d="M0 0 L60 30 M60 0 L0 30" stroke="#cf142b" strokeWidth="4" />
+          <rect x="25" width="10" height="30" fill="#fff" />
+          <rect y="10" width="60" height="10" fill="#fff" />
+          <rect x="27" width="6" height="30" fill="#cf142b" />
+          <rect y="12" width="60" height="6" fill="#cf142b" />
+        </svg>
+    ),
+  },
+];
+
+// ✅ Chargement statique de tous les fichiers JSON dans /lang/{code}/{namespace}.json
+const files = import.meta.glob('./*/*.json', { eager: true }) as Record<string, { default: any }>;
+
+// ✅ Construction dynamique des ressources
+const resources: Record<string, Record<string, any>> = {};
+
+langCodes.forEach((lang) => {
+  resources[lang] = {};
+
+  namespaces.forEach((ns) => {
+    const matchKey = `./${lang}/${ns}.json`;
+    const file = files[matchKey];
+
+    if (file && file.default) {
+      resources[lang][ns] = file.default;
+    } else {
+      console.warn(`⚠️ Missing translation file: ${matchKey}`);
+    }
+  });
+});
 
 i18n.use(initReactI18next).init({
-  resources: {
-    fr: { translation: translationFR },
-  },
-  fallbackLng: "fr",
+  resources,
+  fallbackLng: 'fr',
+  defaultNS: 'translation',
+  ns: namespaces, // ✅ tous les namespaces déclarés ici
   interpolation: {
     escapeValue: false,
   },

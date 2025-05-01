@@ -1,13 +1,14 @@
 
 
 {
+
     "home": {
       "menu": {
-        "play": "Reprendre l'expédition",
+        "play": "Resume expedition",
         "dlc": "Echoes of the eye",
         "options": "Options",
-        "credits": "Crédits"
+        "credits": "Credits"
       }
     }
   
-}
+  }

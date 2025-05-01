@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('../assets/fonts/BrandonGrotesque-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('../assets/fonts/BrandonGrotesque-BoldItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'ITC Serif Gothic';
+  src: url('../assets/fonts/itc-serif-gothic-std-heavy.otf') format('opentype');
+}
+
+body{
+  font-family: "ITC Serif Gothic";
+}
+
+.font-brandon {
+  font-family: 'Brandon Grotesque';
+}
+
+.font-serif-gothic {
+  font-family: 'ITC Serif Gothic';
+}
+
+.font-brandon-bold {
+  font-family: 'Brandon Grotesque';
+  font-weight: bold;
+}
+
+.font-brandon-italic {
+  font-family: 'Brandon Grotesque';
+  font-weight: bold;
+  font-style: italic;
+}
