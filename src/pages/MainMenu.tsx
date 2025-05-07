@@ -8,6 +8,7 @@ import { eoteDialogue } from '../dialogues/echoOfTheYes';
 import { optionsDialogue } from '../dialogues/options';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import BackgroundImg from '../assets/img/backgrounds/mainmenu.png';
 
 const MainMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -74,7 +75,13 @@ const MainMenu = () => {
 
   return (
       <div className="min-h-screen text-white flex items-center relative">
-        <div className="pl-26">
+
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-no-repeat bg-bottom"
+          style={{ backgroundImage: `url(${BackgroundImg})` }}
+        />
+
+        <div className="pl-26 z-1">
           <div className="inline-block">
             <div className="flex items-start justify-start">
               <img src={Logo} alt="Outer Wilds" className="pb-16 object-contain w-[32rem]" />

@@ -5,17 +5,16 @@ import {
   RouterProvider,
   Navigate,
   useLocation,
+  useParams,
+  Outlet
 } from "react-router-dom";
 import App from "./App";
 import MainMenu from "./pages/MainMenu";
-import Test from "./pages/Test";
-import DynamicPostPage from "./components/DynamicPostPage";
-import ArchivePage from "./components/ArchivePage";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound"; // 🔥 Ton composant personnalisé
 import { languages } from "./lang/i18n";
-import { postTypes } from "./hooks/postTypes";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
-import Home from "./pages/Home";
 
 // 🔤 Langues actives
 const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
@@ -23,51 +22,53 @@ const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
 // 🌐 Langue navigateur
 const detectBrowserLanguage = (): string => {
   const browserLang = navigator.language.slice(0, 2);
-  const lang = activeLangCodes.includes(browserLang) ? browserLang : activeLangCodes[0];
-  return lang;
+  return activeLangCodes.includes(browserLang) ? browserLang : activeLangCodes[0];
 };
 
-// 🔁 Redirection si langue absente
+// 🔁 Redirection si pas de langue
 const RedirectToLang = () => {
   const location = useLocation();
   const detectedLang = detectBrowserLanguage();
+  const firstSegment = location.pathname.split("/")[1];
+  if (activeLangCodes.includes(firstSegment)) {
+    return <Navigate to={`/${detectedLang}`} replace />;
+  }
   return <Navigate to={`/${detectedLang}${location.pathname}`} replace />;
+};
+
+// 🔁 Valide que la langue est correcte
+const ValidateLangWrapper = () => {
+  const { lang } = useParams();
+  const fallbackLang = detectBrowserLanguage();
+  if (!lang || !activeLangCodes.includes(lang)) {
+    return <Navigate to={`/${fallbackLang}/404`} replace />;
+  }
+  return <App />;
 };
 
 // 📦 Routes d’app
 const appRoutes = [
   { path: "", element: <MainMenu /> },
   { path: "home", element: <Home /> },
+  { path: "404", element: <NotFound /> },
 ];
-
-// 📦 Routes postTypes avec archive + single
-const postTypeRoutes = postTypes.flatMap((postType) => [
-  {
-    path: `${postType.path}`,
-    element: <ArchivePage postType={postType} />
-  },
-  {
-    path: `${postType.path}/:slug`,
-    element: <DynamicPostPage postType={postType} />
-  }
-]);
 
 // 📦 Router complet
 const router = createBrowserRouter([
   {
     path: "/:lang",
-    element: <App />,
-    children: [
-      ...appRoutes,
-      ...postTypeRoutes,
-    ],
+    element: <ValidateLangWrapper />,
+    children: appRoutes,
   },
-  ...[...appRoutes, ...postTypeRoutes].map(route => ({
+  ...appRoutes.map(route => ({
     path: `/${route.path}`,
     element: <RedirectToLang />,
   })),
   { path: "/", element: <RedirectToLang /> },
-  { path: "*", element: <RedirectToLang /> },
+  {
+    path: "*",
+    element: <Navigate to={`/${detectBrowserLanguage()}/404`} replace />
+  }
 ]);
 
 // 🚀 Mount
