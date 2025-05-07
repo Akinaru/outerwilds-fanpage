@@ -8,7 +8,7 @@ import { eoteDialogue } from '../dialogues/echoOfTheYes';
 import { optionsDialogue } from '../dialogues/options';
 import { useTranslation } from 'react-i18next';
 
-const Home = () => {
+const MainMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isKeyboardNav, setIsKeyboardNav] = useState(false);
 
@@ -20,29 +20,29 @@ const Home = () => {
 
   const menuItems = [
     {
-      label: 'home.menu.play',
+      label: 'mainmenu.play',
       action: () => {
       },
     },
     {
-      label: 'home.menu.dlc',
+      label: 'mainmenu.dlc',
       action: () => {
         setShowEOTE(true);
       },
     },
     {
-      label: 'home.menu.options',
+      label: 'mainmenu.options',
       action: () => {
         setShowOptions(true);
       },
     },
     {
-      label: 'home.menu.help',
+      label: 'mainmenu.help',
       action: () => {
       },
     },
     {
-      label: 'home.menu.credits',
+      label: 'mainmenu.credits',
       action: () => {
         setShowCredits(true);
       },
@@ -146,4 +146,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MainMenu;

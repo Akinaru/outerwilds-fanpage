@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import App from "./App";
-import Home from "./pages/Home";
+import MainMenu from "./pages/MainMenu";
 import Test from "./pages/Test";
 import { languages } from "./lang/i18n";
 import "./styles/tailwind.css";
@@ -36,7 +36,7 @@ const RedirectToLang = () => {
 
 // 📦 Liste centralisée des routes internes
 const appRoutes = [
-  { path: "", element: <Home /> },
+  { path: "", element: <MainMenu /> },
   { path: "test", element: <Test /> },
 ];
 

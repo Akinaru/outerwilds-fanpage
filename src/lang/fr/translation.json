@@ -1,11 +1,9 @@
 {
-    "home": {
-      "menu": {
-        "play": "Reprendre l'expédition",
-        "dlc": "Echoes of the eye",
-        "options": "Options",
-        "help": "Aide",
-        "credits": "Crédits"
-      }
+    "mainmenu": {
+      "play": "Reprendre l'expédition",
+      "dlc": "Echoes of the eye",
+      "options": "Options",
+      "help": "Aide",
+      "credits": "Crédits"
     }
 }
