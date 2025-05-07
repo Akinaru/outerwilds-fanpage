@@ -70,7 +70,7 @@ const MainMenu = () => {
   }, [activeIndex, showCredits, showEOTE, showOptions]);
 
   return (
-      <div className="bg-black min-h-screen text-white flex items-center relative">
+      <div className="min-h-screen text-white flex items-center relative">
         <div className="pl-26">
           <div className="inline-block">
             <div className="flex items-start justify-start">
