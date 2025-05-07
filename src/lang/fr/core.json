@@ -1,3 +1,7 @@
 {
-  "switchlang": "Langue changée !"
+  "switchlang": "Langue changée !",
+  "wrongdevice": {
+    "title": "Appareil non compatible",
+    "message": "Ce site n'est pas disponible sur mobile pour le moment. Merci de vous connecter depuis un ordinateur."
+  }
 }
