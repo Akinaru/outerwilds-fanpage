@@ -9,7 +9,7 @@ import {
 import App from "./App";
 import Home from "./pages/Home";
 import Test from "./pages/Test";
-import i18n, { languages } from "./lang/i18n";
+import { languages } from "./lang/i18n";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
 
