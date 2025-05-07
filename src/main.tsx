@@ -9,61 +9,72 @@ import {
 import App from "./App";
 import MainMenu from "./pages/MainMenu";
 import Test from "./pages/Test";
+import DynamicPostPage from "./components/DynamicPostPage";
+import ArchivePage from "./components/ArchivePage";
 import { languages } from "./lang/i18n";
+import { postTypes } from "./hooks/postTypes";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
 
-// Langues actives
+// 🔤 Langues actives
 const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
 
-// Détection de langue
+// 🌐 Langue navigateur
 const detectBrowserLanguage = (): string => {
   const browserLang = navigator.language.slice(0, 2);
   const lang = activeLangCodes.includes(browserLang) ? browserLang : activeLangCodes[0];
-  console.debug("[🌍] Langue navigateur détectée :", browserLang, "→ utilisée :", lang);
   return lang;
 };
 
-// Redirection automatique
+// 🔁 Redirection si langue absente
 const RedirectToLang = () => {
   const location = useLocation();
   const detectedLang = detectBrowserLanguage();
-
-  const newPath = `/${detectedLang}${location.pathname}`;
-  console.debug("[🔁] Redirection vers", newPath);
-  return <Navigate to={newPath} replace />;
+  return <Navigate to={`/${detectedLang}${location.pathname}`} replace />;
 };
 
-// 📦 Liste centralisée des routes internes
+// 📦 Routes d’app
 const appRoutes = [
   { path: "", element: <MainMenu /> },
   { path: "test", element: <Test /> },
 ];
 
-// 📦 Création dynamique du router
+// 📦 Routes postTypes avec archive + single
+const postTypeRoutes = postTypes.flatMap((postType) => [
+  {
+    path: `${postType.path}`,
+    element: <ArchivePage postType={postType} />
+  },
+  {
+    path: `${postType.path}/:slug`,
+    element: <DynamicPostPage postType={postType} />
+  }
+]);
+
+// 📦 Router complet
 const router = createBrowserRouter([
-  // Routes avec langue explicite
   {
     path: "/:lang",
     element: <App />,
-    children: appRoutes,
+    children: [
+      ...appRoutes,
+      ...postTypeRoutes,
+    ],
   },
-  // Redirection depuis les mêmes routes sans langue
-  ...appRoutes.map(route => ({
-    path: `/${route.path}`, // ex: "/test"
+  ...[...appRoutes, ...postTypeRoutes].map(route => ({
+    path: `/${route.path}`,
     element: <RedirectToLang />,
   })),
-  // Redirection depuis racine ou wildcard
   { path: "/", element: <RedirectToLang /> },
   { path: "*", element: <RedirectToLang /> },
 ]);
 
-// 📦 Mount
+// 🚀 Mount
 const root = document.getElementById("root");
 if (root) {
   ReactDOM.createRoot(root).render(
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
