@@ -39,7 +39,6 @@ const Home = () => {
     {
       label: 'home.menu.help',
       action: () => {
-        setShowCredits(true);
       },
     },
     {
@@ -142,6 +141,7 @@ const Home = () => {
                 onDialogueEnd={() => setShowOptions(false)}
             />
         )}
+        
       </div>
   );
 };

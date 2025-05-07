@@ -9,6 +9,7 @@ export interface Language {
     name: string;
     flag: JSX.Element;
     disabled?: boolean;
+    fallback?: boolean;
 }
 
 export const languages: Language[] = [
@@ -24,6 +25,7 @@ export const languages: Language[] = [
                 </g>
             </svg>
         ),
+        fallback: true,
     },
     {
         code: 'en',
@@ -39,12 +41,14 @@ export const languages: Language[] = [
                 <rect y="12" width="60" height="6" fill="#cf142b" />
             </svg>
         ),
-        disabled: true,
     },
 ];
 
 // ✅ On filtre uniquement les langues actives
-const activeLanguages = languages.filter(l => !l.disabled).map(l => l.code as string);
+export const activeLanguages = languages.filter(l => !l.disabled).map(l => l.code);
+
+// ✅ Détermination de la langue fallback
+export const fallbackLanguage = languages.find(l => l.fallback)?.code || activeLanguages[0] || 'fr';
 
 // ✅ Chargement des fichiers JSON présents dans /lang/
 const files = import.meta.glob('./*/*.json', { eager: true }) as Record<string, { default: any }>;
@@ -69,7 +73,7 @@ activeLanguages.forEach((lang) => {
 
 i18n.use(initReactI18next).init({
     resources,
-    fallbackLng: activeLanguages[0],
+    fallbackLng: fallbackLanguage,
     defaultNS: 'translation',
     ns: namespaces,
     interpolation: {
