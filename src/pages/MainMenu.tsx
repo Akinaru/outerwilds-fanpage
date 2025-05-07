@@ -7,6 +7,7 @@ import { creditsDialogue } from '../dialogues/credits';
 import { eoteDialogue } from '../dialogues/echoOfTheYes';
 import { optionsDialogue } from '../dialogues/options';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const MainMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -17,11 +18,13 @@ const MainMenu = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const menuItems = [
     {
       label: 'mainmenu.play',
       action: () => {
+        navigate('/home');
       },
     },
     {

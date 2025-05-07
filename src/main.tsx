@@ -15,6 +15,7 @@ import { languages } from "./lang/i18n";
 import { postTypes } from "./hooks/postTypes";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
+import Home from "./pages/Home";
 
 // 🔤 Langues actives
 const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
@@ -36,7 +37,7 @@ const RedirectToLang = () => {
 // 📦 Routes d’app
 const appRoutes = [
   { path: "", element: <MainMenu /> },
-  { path: "test", element: <Test /> },
+  { path: "home", element: <Home /> },
 ];
 
 // 📦 Routes postTypes avec archive + single
