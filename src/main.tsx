@@ -6,7 +6,6 @@ import {
   Navigate,
   useLocation,
   useParams,
-  Outlet
 } from "react-router-dom";
 import App from "./App";
 import MainMenu from "./pages/MainMenu";

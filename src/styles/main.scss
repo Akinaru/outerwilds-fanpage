@@ -4,6 +4,11 @@ body{
   background-color: black;
 }
 
+body.block-scroll {
+  overflow: hidden;
+}
+
+
 .text-title{
   font-size: 32px;
 }
