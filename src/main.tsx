@@ -10,10 +10,11 @@ import {
 import App from "./App";
 import MainMenu from "./pages/MainMenu";
 import Home from "./pages/Home";
-import NotFound from "./pages/NotFound"; // 🔥 Ton composant personnalisé
+import NotFound from "./pages/NotFound";
 import { languages } from "./lang/i18n";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
+import TransitionProvider from "./providers/TransitionProvider";
 
 // 🔤 Langues actives
 const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
@@ -35,14 +36,17 @@ const RedirectToLang = () => {
   return <Navigate to={`/${detectedLang}${location.pathname}`} replace />;
 };
 
-// 🔁 Valide que la langue est correcte
 const ValidateLangWrapper = () => {
   const { lang } = useParams();
   const fallbackLang = detectBrowserLanguage();
   if (!lang || !activeLangCodes.includes(lang)) {
     return <Navigate to={`/${fallbackLang}/404`} replace />;
   }
-  return <App />;
+  return (
+    <TransitionProvider>
+      <App />
+    </TransitionProvider>
+  );
 };
 
 // 📦 Routes d’app

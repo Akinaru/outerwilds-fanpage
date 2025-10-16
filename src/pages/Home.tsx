@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import logo from '../assets/img/outer_wilds_logo.png'
-import ScrambleText from '../components/ScrambleText'
 
 gsap.registerPlugin(ScrollTrigger)
 
