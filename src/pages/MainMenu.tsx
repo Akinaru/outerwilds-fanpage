@@ -8,7 +8,10 @@ import { eoteDialogue } from '../dialogues/echoOfTheYes';
 import { optionsDialogue } from '../dialogues/options';
 import { useTranslation } from 'react-i18next';
 import { usePageTransition } from '../providers/TransitionProvider';
-import BackgroundImg from '../assets/img/backgrounds/mainmenu.png';
+
+// Fonds
+import StarsOnlyImg from '../assets/img/backgrounds/mainmenu_starsonly.png';
+import PlanetImg from '../assets/img/backgrounds/mainmenu.png';
 
 const MainMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -18,42 +21,48 @@ const MainMenu = () => {
   const [showEOTE, setShowEOTE] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
 
+  // --- Animations d'apparition ---
+  // Les étoiles sont visibles immédiatement (pas d'état).
+  const [planetVisible, setPlanetVisible] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+
   const { t } = useTranslation();
   const { navigateWithTransition } = usePageTransition();
 
   const menuItems = [
     {
       label: 'mainmenu.play',
-      action: () => {
-        navigateWithTransition('/home');
-      },
+      action: () => navigateWithTransition('/home'),
     },
     {
       label: 'mainmenu.dlc',
-      action: () => {
-        setShowEOTE(true);
-      },
+      action: () => setShowEOTE(true),
     },
     {
       label: 'mainmenu.options',
-      action: () => {
-        setShowOptions(true);
-      },
+      action: () => setShowOptions(true),
     },
     {
       label: 'mainmenu.help',
       action: () => {
-        // Exemple si tu veux une page d'aide plus tard :
         // navigateWithTransition('/help')
       },
     },
     {
       label: 'mainmenu.credits',
-      action: () => {
-        setShowCredits(true);
-      },
+      action: () => setShowCredits(true),
     },
   ];
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPlanetVisible(true), 1000);
+    const t2 = setTimeout(() => setContentVisible(true), 2500);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -77,14 +86,28 @@ const MainMenu = () => {
   }, [activeIndex, showCredits, showEOTE, showOptions]);
 
   return (
-    <div className="min-h-screen text-white flex items-center relative">
+    <div className="min-h-screen text-white flex items-center relative overflow-hidden">
 
+      {/* Couche 1 : étoiles visibles immédiatement */}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-no-repeat bg-bottom"
-        style={{ backgroundImage: `url(${BackgroundImg})` }}
+        className="absolute inset-0 z-0 bg-cover bg-no-repeat bg-bottom opacity-100"
+        style={{ backgroundImage: `url(${StarsOnlyImg})` }}
       />
 
-      <div className="pl-26 z-1">
+      {/* Couche 2 : planète qui apparaît en fondu (plus lent) */}
+      <div
+        className={`absolute inset-0 z-0 bg-cover bg-no-repeat bg-bottom transition-opacity ${planetVisible ? 'opacity-100' : 'opacity-0'}`}
+        style={{
+          backgroundImage: `url(${PlanetImg})`,
+          transition: 'opacity 2000ms ease', // <- fondu plus lent
+        }}
+      />
+
+      {/* Contenu (logo + options) : apparaît après la planète (plus lent) */}
+      <div
+        className={`pl-26 z-10 transition-opacity ${contentVisible ? 'opacity-100' : 'opacity-0'}`}
+        style={{ transition: 'opacity 2000ms ease' }} // <- fondu plus lent
+      >
         <div className="inline-block">
           <div className="flex items-start justify-start">
             <img src={Logo} alt="Outer Wilds" className="pb-16 object-contain w-[32rem]" />
@@ -154,7 +177,6 @@ const MainMenu = () => {
           onDialogueEnd={() => setShowOptions(false)}
         />
       )}
-
     </div>
   );
 };
