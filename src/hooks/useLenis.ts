@@ -10,15 +10,21 @@ export default function useLenis(options?: LenisOptions): void {
       ...options,
     })
 
+    ;(window as any).lenis = lenis
+
+    let rafId = 0
     const raf = (time: number) => {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      rafId = requestAnimationFrame(raf)
     }
-
-    requestAnimationFrame(raf)
+    rafId = requestAnimationFrame(raf)
 
     return () => {
+      cancelAnimationFrame(rafId)
       lenis.destroy()
+      if ((window as any).lenis === lenis) {
+        try { delete (window as any).lenis } catch { (window as any).lenis = undefined }
+      }
     }
   }, [options])
 }

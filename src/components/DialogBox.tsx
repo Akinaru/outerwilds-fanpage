@@ -132,6 +132,32 @@ const DialogBox: React.FC<DialogBoxProps> = ({
     return () => clearTimeout(id);
   }, []);
 
+  // Blocage scroll (Lenis + natif) pendant le dialogue
+  useEffect(() => {
+    const lenis = (window as any)?.lenis;
+    lenis?.stop?.();
+
+    const prevOverflowHtml = document.documentElement.style.overflow;
+    const prevOverflowBody = document.body.style.overflow;
+    const prevOverscroll = document.documentElement.style.overscrollBehavior;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overscrollBehavior = 'none';
+
+    const prevent = (e: Event) => { e.preventDefault(); e.stopPropagation(); };
+    window.addEventListener('wheel', prevent, { passive: false, capture: true });
+    window.addEventListener('touchmove', prevent, { passive: false, capture: true });
+
+    return () => {
+      lenis?.start?.();
+      document.documentElement.style.overflow = prevOverflowHtml;
+      document.body.style.overflow = prevOverflowBody;
+      document.documentElement.style.overscrollBehavior = prevOverscroll;
+      window.removeEventListener('wheel', prevent as any, { capture: true } as any);
+      window.removeEventListener('touchmove', prevent as any, { capture: true } as any);
+    };
+  }, []);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!currentNode) return;
 
@@ -242,7 +268,7 @@ const DialogBox: React.FC<DialogBoxProps> = ({
       tabIndex={-1}
       onKeyDown={handleKeyDown}
       className={`fixed font-brandon select-none inset-0 z-50 ${className}`}
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.85)', touchAction: 'none' }}
     >
       <div className="absolute left-1/2 transform -translate-x-1/2 top-[60%] origin-top w-full">
         <div className={`w-full ${isVisible && !isEnded ? 'opacity-100' : 'opacity-0'}`}>

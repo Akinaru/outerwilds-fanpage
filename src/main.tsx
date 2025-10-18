@@ -17,6 +17,7 @@ import { languages } from "./lang/i18n";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
 import TransitionProvider from "./providers/TransitionProvider";
+import NavigationMenuProvider from "./providers/NavigationMenuProvider";
 
 // 🔤 Langues actives
 const activeLangCodes = languages.filter(l => !l.disabled).map(l => l.code);
@@ -46,7 +47,9 @@ const ValidateLangWrapper = () => {
   }
   return (
     <TransitionProvider>
-      <App />
+      <NavigationMenuProvider>
+        <App />
+      </NavigationMenuProvider>
     </TransitionProvider>
   );
 };

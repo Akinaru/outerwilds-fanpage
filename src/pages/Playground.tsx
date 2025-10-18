@@ -105,6 +105,12 @@ export default function Playground() {
           onDialogueEnd={() => setOpen(false)}
         />
       )}
+
+      <div className="mt-4">
+        {Array.from({ length: 100 }, (_, i) => (
+          <p key={i}>Index: {i}</p>
+        ))}
+      </div>
     </div>
   )
 }
