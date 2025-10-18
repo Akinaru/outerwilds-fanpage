@@ -50,6 +50,9 @@ const DialogBox: React.FC<DialogBoxProps> = ({
   const hoverSoundRef = useRef<HTMLAudioElement | null>(null);
   const advanceSoundRef = useRef<HTMLAudioElement | null>(null);
 
+  // ⬇️ ref + focus pour capter le clavier localement
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const currentNode: DialogueNode | undefined = dialogueNodes[currentNodeId];
   const typingSpeed: number = 20;
 
@@ -110,48 +113,56 @@ const DialogBox: React.FC<DialogBoxProps> = ({
     if (showResponses) setActiveIndex(0);
   }, [showResponses]);
 
+  // ⬇️ focus automatique du conteneur pour recevoir les keydown
   useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (!currentNode) return;
+    const id = window.setTimeout(() => {
+      containerRef.current?.focus();
+    }, 0);
+    return () => clearTimeout(id);
+  }, []);
 
-      if (event.key.toLowerCase() === 'e') {
-        event.preventDefault();
-        if (isTyping) {
-          skipAnimation();
-          return;
-        }
+  // ⬇️ gestion locale des inputs (remplace l'écouteur global)
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!currentNode) return;
 
-        if (!showResponses) return;
+    // Empêche la page derrière d'intercepter
+    if (['e', 'E', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-        const responses = currentNode.responses || [];
-        if (responses.length === 0) {
-          handleEndOrAutoNext();
-        } else if (responses[activeIndex]) {
-          handleResponseClick(responses[activeIndex].nextId);
-        }
-        playAdvanceDialogSound();
+    if (event.key.toLowerCase() === 'e') {
+      if (isTyping) {
+        skipAnimation();
         return;
       }
 
       if (!showResponses) return;
 
       const responses = currentNode.responses || [];
-
-      if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-        event.preventDefault();
-        setIsKeyboardNav(true);
-        setActiveIndex(prev =>
-            event.key === 'ArrowUp'
-                ? prev > 0 ? prev - 1 : responses.length - 1
-                : prev < responses.length - 1 ? prev + 1 : 0
-        );
-        playHoverSound();
+      if (responses.length === 0) {
+        handleEndOrAutoNext();
+      } else if (responses[activeIndex]) {
+        handleResponseClick(responses[activeIndex].nextId);
       }
-    };
+      playAdvanceDialogSound();
+      return;
+    }
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [showResponses, activeIndex, currentNode, isTyping]);
+    if (!showResponses) return;
+
+    const responses = currentNode.responses || [];
+
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      setIsKeyboardNav(true);
+      setActiveIndex(prev =>
+          event.key === 'ArrowUp'
+              ? prev > 0 ? prev - 1 : responses.length - 1
+              : prev < responses.length - 1 ? prev + 1 : 0
+      );
+      playHoverSound();
+    }
+  };
 
   const handleResponseClick = (nextId: string): void => {
     if (!dialogueNodes[nextId]) return;
@@ -205,7 +216,13 @@ const DialogBox: React.FC<DialogBoxProps> = ({
   }
 
   return (
-      <div className={`fixed font-brandon select-none inset-0 z-50 ${className}`} style={{ backgroundColor: 'rgba(0, 0, 0, 0.85)' }}>
+      <div
+        ref={containerRef}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        className={`fixed font-brandon select-none inset-0 z-50 ${className}`}
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.85)' }}
+      >
         <div className="absolute left-1/2 transform -translate-x-1/2 top-[60%] origin-top w-full">
           <div className={`w-full ${isVisible && !isEnded ? 'opacity-100' : 'opacity-0'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

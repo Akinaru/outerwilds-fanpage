@@ -64,29 +64,8 @@ const MainMenu = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (!showCredits && !showEOTE && !showOptions && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
-        event.preventDefault();
-        setIsKeyboardNav(true);
-
-        if (event.key === 'ArrowUp') {
-          setActiveIndex(prev => (prev > 0 ? prev - 1 : menuItems.length - 1));
-        } else {
-          setActiveIndex(prev => (prev < menuItems.length - 1 ? prev + 1 : 0));
-        }
-      } else if (!showCredits && !showEOTE && !showOptions && event.key === 'Enter') {
-        menuItems[activeIndex].action();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex, showCredits, showEOTE, showOptions]);
-
   return (
-    <div className="min-h-screen text-whit bg-red-500 flex items-center relative overflow-hidden">
+    <div className="min-h-screen text-white bg-black flex items-center relative overflow-hidden">
 
       {/* Couche 1 : étoiles visibles immédiatement */}
       <div
