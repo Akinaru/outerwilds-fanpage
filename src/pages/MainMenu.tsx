@@ -86,7 +86,7 @@ const MainMenu = () => {
   }, [activeIndex, showCredits, showEOTE, showOptions]);
 
   return (
-    <div className="min-h-screen text-white flex items-center relative overflow-hidden">
+    <div className="min-h-screen text-whit bg-red-500 flex items-center relative overflow-hidden">
 
       {/* Couche 1 : étoiles visibles immédiatement */}
       <div
