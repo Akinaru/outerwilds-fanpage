@@ -11,6 +11,8 @@ import App from "./App";
 import MainMenu from "./pages/MainMenu";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import Playground from "./pages/Playground";
+
 import { languages } from "./lang/i18n";
 import "./styles/tailwind.css";
 import "./styles/app.scss";
@@ -53,6 +55,7 @@ const ValidateLangWrapper = () => {
 const appRoutes = [
   { path: "", element: <MainMenu /> },
   { path: "home", element: <Home /> },
+  { path: "playground", element: <Playground /> },
   { path: "404", element: <NotFound /> },
 ];
 

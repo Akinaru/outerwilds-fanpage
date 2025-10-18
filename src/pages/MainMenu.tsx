@@ -52,6 +52,10 @@ const MainMenu = () => {
       label: 'mainmenu.credits',
       action: () => setShowCredits(true),
     },
+    {
+      label: 'mainmenu.playground',
+      action: () => navigateWithTransition('/playground'),
+    },
   ];
 
   useEffect(() => {
