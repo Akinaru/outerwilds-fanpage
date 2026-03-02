@@ -1,6 +1,6 @@
 {
   "files": [],
-  "noUnusedLocals": false
+  "noUnusedLocals": false,
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
